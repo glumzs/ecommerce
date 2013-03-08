@@ -6,6 +6,7 @@ Created on Mar 7, 2013
 from django.db import models
 import django.contrib.localflavor.us.forms as localflavor
 from models import EcommerceModel
+from ProductModels import ProductModel
 
 class SupplierModel(EcommerceModel):
     name = models.CharField()
@@ -21,3 +22,11 @@ class SupplierModel(EcommerceModel):
     state = localflavor.USStateField()
     zip = localflavor.USZipCodeField()
     
+    
+    
+    @classmethod
+    def insertProducts(cls, supplierId, productList):
+        for product in productList:
+            copy = ProductModel.copy(product.pk)
+            copy.supplierId = supplierId
+            copy.save()

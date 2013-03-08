@@ -76,6 +76,11 @@ class CategoryModel(EcommerceModel):
             return 0
         except:
             return -1
+    
+    @classmethod
+    def getCategoryProducts(cls, categoryId):
+        return ProductModel.objects.filter(categories__categoryId__exact = categoryId)
+        
         
     
 #Simple model to hold brand name.
