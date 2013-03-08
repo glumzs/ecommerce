@@ -28,6 +28,23 @@ class EcommerceModel(models.Model):
         except:
             return -1
     
+    @classmethod
+    def get(cls, obj_id):
+        return cls.objects.get(id = obj_id)
+    
+    @classmethod
+    def delete(cls, obj_id):
+        obj = cls.objects.get(id = obj_id)
+        if not obj:
+            return -1
+        try:
+            obj.delete()
+            return 0
+        except:
+            return -2
+    @classmethod
+    def copy():
+    
     def _save_getId(self):
         self.save()
         return self.id

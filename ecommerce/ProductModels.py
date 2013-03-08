@@ -33,24 +33,50 @@ class ProductModel(EcommerceModel):
     brandId = models.ForeignKey('BrandModel')
     
     availability = models.CharField()
+    
+    categories = models.ManyToManyField(through = 'CategoryProductModel')
 
+class CategoryProductModel(models.Model):
+    categoryId = models.ForeignKey('Category')
+    productId  = models.ForeignKey('Product')
+    #TODO: what is this field for?
+    vorder = models.IntegerField()
 
 class ProductImageModel(EcommerceModel):
     productId = models.ForeignKey('ProductModel')
     imgPath = models.CharField()
     md5sum = models.CharField(max_length = 32)
-    
-#Model for mapping many-to-many relationship
-#between categories and products. 
-class CategoryProductModel(EcommerceModel):
-    category = models.ForeignKey('CategoryModel')
-    product = models.ForeignKey(ProductModel)
-    
+
     
 #Simple model to hold category name.
 class CategoryModel(EcommerceModel):
     parentCategory = models.ForeignKey("self")
     name = models.CharField()
+    
+    def getProducts(self, categoryId):
+        return ProductModel.objects.filter(categoryId = categoryId)
+    
+    #TODO: what is product list? Assuming it's an iterable of products for now
+    @classmethod
+    def addProductsToCategory(cls, categoryId, productList):
+        category = cls.objects.get(id = categoryId)
+        try:
+            for product in productList:
+                product.categories.add(category)
+            return 0
+        except:
+            return -1
+    
+    @classmethod
+    def delProductsFromCategory(cls, categoryId, productList):
+        category = cls.objects.get(id = categoryId)
+        try:
+            for product in productList:
+                product.categories.remove(category)
+            return 0
+        except:
+            return -1
+        
     
 #Simple model to hold brand name.
 class BrandModel(EcommerceModel):
