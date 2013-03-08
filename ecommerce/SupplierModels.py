@@ -21,5 +21,3 @@ class SupplierModel(EcommerceModel):
     state = localflavor.USStateField()
     zip = localflavor.USZipCodeField()
     
-    def create(self, name, desc, primaryEmail, secondEmail = None, ):
-        pass

@@ -34,7 +34,7 @@ class EcommerceModel(models.Model):
     
     @classmethod
     def delete(cls, obj_id):
-        obj = cls.objects.get(id = obj_id)
+        obj = cls.get(id = obj_id)
         if not obj:
             return -1
         try:
