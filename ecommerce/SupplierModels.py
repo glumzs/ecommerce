@@ -26,7 +26,12 @@ class SupplierModel(EcommerceModel):
     
     @classmethod
     def insertProducts(cls, supplierId, productList):
-        for product in productList:
-            copy = ProductModel.copy(product.pk)
-            copy.supplierId = supplierId
-            copy.save()
+        try:
+            for product in productList:
+                copy = ProductModel.copy(product.pk)
+                copy.supplierId = supplierId
+                copy.save()
+            return 0
+        
+        except:
+            return 1
