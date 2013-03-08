@@ -6,47 +6,35 @@ Created on Mar 3, 2013
 
 
 from django.db import models
-import django.contrib.localflavor.us.forms as localflavor
 
-class BrandModel(models.Model):
-    brandName = models.CharField()
-    
-class SupplierModel(models.Model):
-    name = models.CharField()
-    desc = models.TextField()
-    merchantCustomerId = models.CharField()
-    
-    primaryEmail = models.EmailField()
-    secondEmail = models.EmailField()
-    phone = localflavor.USPhoneNumberField()
-    fax   = localflavor.USPhoneNumberField()
-    address = models.CharField()
-    city = models.CharField()
-    state = localflavor.USStateField()
-    zip = localflavor.USZipCodeField()
 
-class ProductModel(models.Model):
-    name = models.CharField()
-    desc = models.TextField()
-    supplierId  = models.IntegerField()
-    supplierProductCode = models.CharField()
-    supplierPrice = models.DecimalField(decimal_places = 2)
-    merchantPrice = models.DecimalField(decimal_places = 2)
-    custFactor = models.FloatField(blank=False) 
-    manufacturerName = models.CharField()
+#Generic Model that incorporates much of the functionality of our api.
+#Meant to be subclassed.
+class EcommerceModel(models.Model):
     
-    createdDate = models.DateTimeField()
-    updatedDate = models.DateTimeField()
-    lastsoldDate = models.DateTimeField()
+    @classmethod
+    def create(cls, **kwargs):
+        try:
+            a = cls(**kwargs)
+            return a._save_getId()
+        except:
+            return -1
+        
+    @classmethod
+    def update(cls, obj_id, **kwargs):
+        try:
+            a = cls(index = id, **kwargs)
+            return a._save_getId()
+        except:
+            return -1
     
-    numSold = models.PositiveIntegerField()
-    numReturned = models.PositiveIntegerField()
+    def _save_getId(self):
+        self.save()
+        return self.id
     
-    published = models.BooleanField()
-    categorized = models.BooleanField()
-    
-    brandId = models.PositiveIntegerField()
-    
-    availibility = models.CharField()
+class PriceField(models.DecimalField):
+    def __init__(self, **kwargs):
+        super(PriceField, self).__init__(decimal_places = 2)
+
     
     
