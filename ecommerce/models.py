@@ -42,9 +42,7 @@ class EcommerceModel(models.Model):
             return 0
         except:
             return -2
-    @classmethod
-    def copy():
-    
+
     def _save_getId(self):
         self.save()
         return self.id
