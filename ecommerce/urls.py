@@ -1,32 +1,42 @@
 from django.conf.urls import patterns, include, url
+from ecommerce.views import *
+from ecommerce import settings
 
 # Uncomment the next two lines to enable the admin:
 # from django.contrib import admin
 # admin.autodiscover()
 
 urlpatterns = patterns('',
-                       #supplier handlers
-                       url(r'^suppliers/create_supplier$', 'ecommerce.views.createSupplier'),
-                       url(r'^suppliers/get_supplier$', 'ecommerce.views.getSupplier'),
-                       url(r'^suppliers/update_supplier$', 'ecommerce.views.updateSupplier'),
-                       url(r'^suppliers/delete_supplier$', 'ecommerce.views.deleteSupplier'),
-                       url(r'^suppliers/insert_products$', 'ecommerce.views.insertProducts'),
-                       #category handlers
-                       url(r'^category/get_category$', 'ecommerce.views.getCategory'),
-                       url(r'^category/category_products$', 'ecommerce.views.getCategoryProducts'),
-                       url(r'^category/add_category$', 'ecommerce.views.addCategory');
-                       url(r'^category/update_category$', 'ecommerce.views.updateCategory'),
-                       url(r'^category/delete_category$', 'ecommerce.views.deleteCategory'),
-                       url(r'^category/add_products$', 'ecommerce.views.addProductsToCategory'),
-                       url(r'^category/del_products$', 'ecommerce.views.delProductsFromCategory'),
-                       #product handlers
-                       url(r'^product/update_product$', 'ecommerce.views.updateProduct'),
-                       url(r'^product/create_product$', 'ecommerce.views.createProduct'),
-                       url(r'^product/get_product$', 'ecommerce.views.getProduct'),
-                       url(r'^product/copy_product$', 'ecommerce.views.copyProduct'),
-                       url(r'^product/delete_product$', 'ecommerce.views.deleteProduct'),
-                       #site handler
-                       url(r'^$', 'ecommerce.views.home'),
+
+    # supplier handlers
+    (r'^suppliers/create_supplier$', createSupplier),
+    (r'^suppliers/get_supplier$', getSupplier),
+    (r'^suppliers/update_supplier$', updateSupplier),
+    (r'^suppliers/delete_supplier$', deleteSupplier),
+    (r'^suppliers/insert_products$', insertProducts),
+    
+    # category handlers
+    (r'^category/get_category$', getCategory),
+    (r'^category/category_products$', getCategoryProducts),
+    (r'^category/add_category$', addCategory);
+    (r'^category/update_category$', updateCategory),
+    (r'^category/delete_category$', deleteCategory),
+    (r'^category/add_products$', addProductsToCategory),
+    (r'^category/del_products$', delProductsFromCategory),
+    
+    # product handlers
+    (r'^product/update_product$', updateProduct),
+    (r'^product/create_product$', createProduct),
+    (r'^product/get_product$', getProduct),
+    (r'^product/copy_product$', copyProduct),
+    (r'^product/delete_product$', deleteProduct),
+    
+    # site handler
+    (r'^$', home),
+    
+    # static
+    (r'^(?P<path>.*(js|css|bmp|jpg|gif|png|ico|html))$', 'django.views.static.serve', {'document_root':settings.PROJECT_DIR + '/media/'}),
+    
     # Examples:
     # url(r'^$', 'ecommerce.views.home', name='home'),
     # url(r'^ecommerce/', include('ecommerce.foo.urls')),
