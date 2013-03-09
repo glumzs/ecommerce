@@ -78,13 +78,16 @@ def deleteProduct(request):
         rtn = ProductModel.delete(productID)
         resp = {"errCode": rtn}
     return HttpResponse(content=json.dumps(resp), content_type='application/json')
-#TODO
+
 def copyProduct(request):
-    if request.method != "POST":
+    if request.method != "GET":
         resp = {"errCode": 1}
     else:
         data = json.loads(request.raw_post_data)
         productID = data['product_id']
         rtn = ProductModel.copy(productID)
-        resp = {"errCode": rtn}
+        if rtn:
+            resp = {"errCode": 0,"product_info": rtn}
+        else:
+            resp = {"errCode": -1}
     return HttpResponse(content=json.dumps(resp), content_type='application/json')
