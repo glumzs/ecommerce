@@ -14,9 +14,9 @@ class SupplierModel(EcommerceModel):
     merchantCustomerId = models.CharField()
     
     primaryEmail = models.EmailField()
-    secondEmail = models.EmailField()
+    secondEmail = models.EmailField(required = False)
     phone = localflavor.USPhoneNumberField()
-    fax   = localflavor.USPhoneNumberField()
+    fax   = localflavor.USPhoneNumberField(required = False)
     address = models.CharField()
     city = models.CharField()
     state = localflavor.USStateField()
@@ -26,12 +26,10 @@ class SupplierModel(EcommerceModel):
     
     @classmethod
     def insertProducts(cls, supplierId, productList):
-        try:
-            for product in productList:
-                copy = ProductModel.copy(product.pk)
-                copy.supplierId = supplierId
-                copy.save()
-            return 0
+        if not SupplierModel.get(supplierId):
+            return -1
+        for product in productList:
+            product['supplierId'] = supplierId 
+            ProductModel.create(**product)
+        return 0
         
-        except:
-            return 1
