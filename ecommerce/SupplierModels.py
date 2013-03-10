@@ -5,8 +5,8 @@ Created on Mar 7, 2013
 '''
 from django.db import models
 import django.contrib.localflavor.us.forms as localflavor
-from models import EcommerceModel
-from ProductModels import ProductModel
+from ecommerce.models import EcommerceModel
+from ecommerce.ProductModels import ProductModel
 
 class SupplierModel(EcommerceModel):
     name = models.CharField()
@@ -14,7 +14,7 @@ class SupplierModel(EcommerceModel):
     merchantCustomerId = models.CharField()
     
     primaryEmail = models.EmailField()
-    secondEmail = models.EmailField(required = False)
+    secondEmail = models.EmailField(blank = True)
     phone = localflavor.USPhoneNumberField()
     fax   = localflavor.USPhoneNumberField(required = False)
     address = models.CharField()

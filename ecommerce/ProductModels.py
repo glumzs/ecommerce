@@ -5,19 +5,18 @@ Created on Mar 7, 2013
 '''
 from django.db import models
 from models import EcommerceModel, PriceField
-from SupplierModels import SupplierModel
 
 
 
 class ProductModel(EcommerceModel):
     name = models.CharField()
     desc = models.TextField()
-    supplierId  = models.ForeignKey(SupplierModel)
+    supplierId  = models.ForeignKey('SupplierModel')
     supplierProductCode = models.CharField()
     supplierPrice = PriceField()
     merchantPrice = PriceField()
     
-    custFactor = models.FloatField(required=False) 
+    custFactor = models.FloatField(blank=True) 
     manufacturerId = models.ForeignKey('ManufacturerModel')
     
     createdDate = models.DateTimeField()
@@ -34,7 +33,7 @@ class ProductModel(EcommerceModel):
     
     availability = models.CharField()
     
-    categories = models.ManyToManyField(through = 'CategoryProductModel')
+    categories = models.ManyToManyField('Category',through = 'CategoryProductModel')
 
 class CategoryProductModel(models.Model):
     categoryId = models.ForeignKey('Category')
