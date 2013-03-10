@@ -17,8 +17,8 @@ class ProductModel(EcommerceModel):
     supplierPrice = PriceField()
     merchantPrice = PriceField()
     
-    custFactor = models.FloatField(blank=False) 
-    manufacturerName = models.ForeignKey('ManufacturerModel')
+    custFactor = models.FloatField(required=False) 
+    manufacturerId = models.ForeignKey('ManufacturerModel')
     
     createdDate = models.DateTimeField()
     updatedDate = models.DateTimeField()
@@ -59,24 +59,24 @@ class CategoryModel(EcommerceModel):
     #TODO: what is product list? Assuming it's an iterable of products for now
     @classmethod
     def addProductsToCategory(cls, categoryId, productList):
-        category = cls.objects.get(id = categoryId)
-        try:
-            for product in productList:
-                product.categories.add(category)
-            return 0
-        except:
-            return -1
+        return cls._changeProductCategory(categoryId, productList, 'add')
     
     @classmethod
     def delProductsFromCategory(cls, categoryId, productList):
+        return cls._changeProductCategory(categoryId, productList, 'remove')
+    
+    @classmethod
+    def _changeProductCategory(cls, categoryId, productList, func):
         category = cls.objects.get(id = categoryId)
         try:
             for product in productList:
-                product.categories.remove(category)
+                #If productList is a list of ids, uncomment next line
+                #product = ProductModel.get(id = product)
+                product.categories.__getattr__(func)(category)
             return 0
         except:
-            return -1
-    
+            return -1   
+         
     @classmethod
     def getCategoryProducts(cls, categoryId):
         return ProductModel.objects.filter(categories__categoryId__exact = categoryId)
@@ -85,7 +85,7 @@ class CategoryModel(EcommerceModel):
     
 #Simple model to hold brand name.
 class BrandModel(EcommerceModel):
-    brandName = models.CharField()            
+    name = models.CharField()            
     
 
 class ManufacturerModel(EcommerceModel):
